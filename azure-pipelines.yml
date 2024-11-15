@@ -7,10 +7,10 @@ pool:
  name: agent_pool
 
 variables:
-  dockerRegistryServiceConnection: 'cr2_conn'
-  imageRepository: 'resultapp'
-  containerRegistry: 'trinayacr2.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/result/Dockerfile'
+  dockerRegistryServiceConnection: 'ACR_service_conn'
+  imageRepository: 'app'
+  containerRegistry: 'cicdtri.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
 stages:
@@ -26,7 +26,7 @@ stages:
         containerRegistry: '$(dockerRegistryServiceConnection)'
         repository: '$(imageRepository)'
         command: 'build'
-        Dockerfile: '*/Dockerfile'
+        Dockerfile: '$(dockerfilePath)'
         tags: '$(tag)'
         
 - stage: Push
@@ -43,25 +43,3 @@ stages:
         command: 'push'
         tags: '$(tag)'
 
-- stage: Dos2Unix
-  displayName: Dos2Unix
-  jobs:
-  - job: Dos2Unix
-    displayName: Dos2Unix
-    steps:
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: dos2unix ./scripts/updateK8sManifests.sh
-
-- stage: Update
-  displayName: Update
-  jobs:
-  - job: Update
-    displayName: Update
-    steps:
-      - task: ShellScript@2
-        displayName : Update
-        inputs:
-          scriptPath: 'scripts/updateK8sManifests.sh'
-          args: 'result $(imageRepository) $(tag)'
