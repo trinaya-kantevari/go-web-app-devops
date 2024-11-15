@@ -1,0 +1,67 @@
+trigger:
+ paths:
+    include:
+      - static
+
+pool:
+ name: agent_pool
+
+variables:
+  dockerRegistryServiceConnection: 'cr2_conn'
+  imageRepository: 'resultapp'
+  containerRegistry: 'trinayacr2.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/result/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: BuildImage
+  displayName: Build Image
+  jobs:
+  - job: BuildImage
+    displayName: Build Image
+    steps:
+    - task: Docker@2
+      displayName: Build Image
+      inputs:
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'build'
+        Dockerfile: '*/Dockerfile'
+        tags: '$(tag)'
+        
+- stage: Push
+  displayName: Push
+  jobs:
+  - job: Push
+    displayName: Push
+    steps:
+    - task: Docker@2
+      displayName: Push
+      inputs:
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'push'
+        tags: '$(tag)'
+
+- stage: Dos2Unix
+  displayName: Dos2Unix
+  jobs:
+  - job: Dos2Unix
+    displayName: Dos2Unix
+    steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: dos2unix ./scripts/updateK8sManifests.sh
+
+- stage: Update
+  displayName: Update
+  jobs:
+  - job: Update
+    displayName: Update
+    steps:
+      - task: ShellScript@2
+        displayName : Update
+        inputs:
+          scriptPath: 'scripts/updateK8sManifests.sh'
+          args: 'result $(imageRepository) $(tag)'
