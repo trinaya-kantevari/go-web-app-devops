@@ -4,7 +4,7 @@ trigger:
       - static
 
 pool:
- name: agent_pool
+ name: POOL
 
 variables:
   dockerRegistryServiceConnection: 'ACR_service_conn'
