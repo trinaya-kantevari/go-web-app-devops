@@ -53,14 +53,6 @@ stages:
         cliProjectKey: 'my_project'
         cliProjectName: 'CICD-sonar'
         cliSources: '.'
-    - task: SonarQubeAnalyze@7
-      displayName: Run Code Analysis
-      inputs:
-        jdkversion: 'JAVA_HOME_17_X64'
-    - task: SonarQubePublish@7
-      displayName: Publish Sonar Results
-      inputs:
-        pollingTimeoutSec: '300'
 
 - stage: BuildImage
   displayName: Build Image
