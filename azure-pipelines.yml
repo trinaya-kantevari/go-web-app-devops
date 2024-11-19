@@ -38,29 +38,6 @@ stages:
     - script: go test ./...
       displayName: Run Go Tests
 
-- stage: CodeAnalysis
-  displayName: Code Analysis
-  jobs:
-  - job: CodeAnalysis
-    displayName: Code Analysis
-    steps:
-    - task: SonarQubePrepare@7
-      displayName: Prepare Analysis Configuration
-      inputs:
-        SonarQube: 'sonar_conn'
-        scannerMode: 'cli'
-        configMode: 'manual'
-        cliProjectKey: 'my_project'
-        cliProjectName: 'CICD-sonar'
-        cliSources: '.' 
-
-    - task: SonarQubeAnalyze@7
-      displayName: Run Code Analysis
-    - task: SonarQubePublish@7
-      displayName: Publish Sonar Results
-      inputs:
-        pollingTimeoutSec: '300'
-
 - stage: BuildImage
   displayName: Build Image
   jobs:
