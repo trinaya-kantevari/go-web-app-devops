@@ -32,10 +32,9 @@ stages:
   - job: Test
     displayName: Test
     steps:
-    - task: Go@0
-      inputs:
-        command: 'test'
-  
+    - script: go test ./...
+      displayName: Run Go Tests
+
 - stage: BuildImage
   displayName: Build Image
   jobs:
