@@ -32,6 +32,9 @@ stages:
   - job: Test
     displayName: Test
     steps:
+    - task: GoTool@0
+      inputs:
+        version: '1.10'
     - script: go test ./...
       displayName: Run Go Tests
 
