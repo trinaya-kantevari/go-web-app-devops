@@ -56,8 +56,6 @@ stages:
 
     - task: SonarQubeAnalyze@7
       displayName: Run Code Analysis
-      inputs:
-        jdkversion: 'JAVA_HOME'
     - task: SonarQubePublish@7
       displayName: Publish Sonar Results
       inputs:
