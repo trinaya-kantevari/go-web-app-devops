@@ -14,6 +14,26 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
+- stage: Build
+  displayName: Build
+  jobs:
+  - job: Build
+    displayName: Build
+    steps:
+    - task: Go@0
+      inputs:
+        command: 'build'
+
+- stage: Test
+  displayName: Test
+  jobs:
+  - job: Test
+    displayName: Test
+    steps:
+    - task: Go@0
+      inputs:
+        command: 'test'
+  
 - stage: BuildImage
   displayName: Build Image
   jobs:
