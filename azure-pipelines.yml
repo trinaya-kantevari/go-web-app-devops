@@ -22,7 +22,7 @@ stages:
     steps:
     - task: GoTool@0
       inputs:
-        version: '1.22'
+        version: '1.10'
     - script: go build -o go-web-app
       displayName: Build Go Web Application
 
