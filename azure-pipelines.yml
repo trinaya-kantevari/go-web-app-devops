@@ -44,8 +44,23 @@ stages:
   - job: CodeAnalysis
     displayName: Code Analysis
     steps:
-    
-    - task: SonarQubePreBuild@1
+    - task: SonarQubePrepare@7
+      displayName: Prepare Analysis Configuration
+      inputs:
+        SonarQube: 'sonar_conn'
+        scannerMode: 'cli'
+        configMode: 'manual'
+        cliProjectKey: 'my_project'
+        cliProjectName: 'CICD-sonar'
+        cliSources: '.'
+    - task: SonarQubeAnalyze@7
+      displayName: Run Code Analysis
+      inputs:
+        jdkversion: 'JAVA_HOME_17_X64'
+    - task: SonarQubePublish@7
+      displayName: Publish Sonar Results
+      inputs:
+        pollingTimeoutSec: '300'
 
 - stage: BuildImage
   displayName: Build Image
@@ -75,4 +90,3 @@ stages:
         repository: '$(imageRepository)'
         command: 'push'
         tags: '$(tag)'
-
