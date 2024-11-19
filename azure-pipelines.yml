@@ -20,9 +20,11 @@ stages:
   - job: Build
     displayName: Build
     steps:
-    - task: Go@0
+    - task: GoTool@0
       inputs:
-        command: 'build'
+        version: '1.22'
+    - script: go build -o go-web-app
+      displayName: Build Go Web Application
 
 - stage: Test
   displayName: Test
