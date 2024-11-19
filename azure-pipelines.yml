@@ -38,6 +38,15 @@ stages:
     - script: go test ./...
       displayName: Run Go Tests
 
+- stage: CodeAnalysis
+  displayName: Code Analysis
+  jobs:
+  - job: CodeAnalysis
+    displayName: Code Analysis
+    steps:
+    
+    - task: SonarQubePreBuild@1
+
 - stage: BuildImage
   displayName: Build Image
   jobs:
